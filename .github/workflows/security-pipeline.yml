@@ -1,0 +1,38 @@
+name: Security Pipeline
+
+on: [push]
+
+jobs:
+  security-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pas 0: Preparació de l'entorn
+      - name: Checkout del codi
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instal·lar dependències
+        run: |
+          python -m pip install --upgrade pip
+          pip install selenium flask
+
+      # PAS 1: Unit Testing (Executar tests de la Part 2)
+      - name: Run Unit Tests (test_vault.py)
+        run: |
+          python3 test_vault.py
+
+      # PAS 2: Security Scan (Executar attack_bot.py en mode Headless)
+      - name: Run Security Scan (attack_bot.py)
+        run: |
+          # Iniciem el servidor en segon pla (&) perquè el bot pugui atacar
+          python3 -m http.server 5000 &
+          sleep 5 # Esperem que el servidor s'aixequi
+          # Executem el bot. 
+          # Nota: Assegura't que el bot estigui configurat com a "headless" 
+          # o passa-li l'opció per codi com hem vist abans.
+          python3 attack_bot.py
