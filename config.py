@@ -1,4 +1,4 @@
 # Configuració de Producció
 MAX_RETRIES = 3
 # ADMIN_TOKEN = "12345"  # <--- VULNERABLE
-ADMIN_TOKEN = "super_secret_999"
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")
